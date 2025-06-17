@@ -23,31 +23,30 @@ public class PageService {
     }
 
     public Page addPage(PageRequest request, String ownerEmail) {
-    Optional<User> userOpt = userRepository.findByEmail(ownerEmail);
-    if (userOpt.isEmpty()) {
-        throw new RuntimeException("Owner user not found");
+        Optional<User> userOpt = userRepository.findByEmail(ownerEmail);
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("Owner user not found");
+        }
+
+        User owner = userOpt.get();
+
+        if (owner.getRole() != Role.OWNER) {
+            throw new RuntimeException("Only users with role OWNER can add pages.");
+        }
+
+        Page page = new Page();
+        page.setName(request.getName());
+        page.setLocation(request.getLocation());
+        page.setWorkHours(request.getWorkHours());
+        page.setDescription(request.getDescription());
+        page.setCategory(request.getCategory());
+        page.setType(request.getType());
+        page.setOwner(owner);
+
+        return pageRepository.save(page);
     }
 
-    User owner = userOpt.get();
-
-    if (owner.getRole() != Role.OWNER) {
-        throw new RuntimeException("Only users with role OWNER can add pages.");
-    }
-
-    Page page = new Page();
-    page.setName(request.getName());
-    page.setLocation(request.getLocation());
-    page.setWorkHours(request.getWorkHours());
-    page.setDescription(request.getDescription());
-    page.setCategory(request.getCategory());
-    page.setType(request.getType());
-    page.setOwner(owner);
-
-    return pageRepository.save(page);
-    }
-
-    public boolean updatePage(Long pageId, String name, String location, String workHours,
-                          String description, String category, String type) {
+    public boolean updatePage(Long pageId, String name, String location, String workHours, String description, String category, String type) {
         Optional<Page> optionalPage = pageRepository.findById(pageId);
         if (optionalPage.isEmpty()) {
             return false;

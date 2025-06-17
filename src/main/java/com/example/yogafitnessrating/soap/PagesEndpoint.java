@@ -51,6 +51,7 @@ public class PagesEndpoint {
         response.setStatus(updated ? "SUCCESS" : "FAILURE: Page not found");
         return response;
     }
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "DeletePageRequest")
     @ResponsePayload
     public DeletePageResponse deletePage(@RequestPayload DeletePageRequest request) {
@@ -61,6 +62,7 @@ public class PagesEndpoint {
 
         return response;
     }
+    
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "ListPagesRequest")
     @ResponsePayload
     public ListPagesResponse listPages(@RequestPayload ListPagesRequest request) {
