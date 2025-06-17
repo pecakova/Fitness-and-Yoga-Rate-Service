@@ -30,7 +30,6 @@ public class PageService {
 
     User owner = userOpt.get();
 
-    // ✅ ROLE CHECK - clean version
     if (owner.getRole() != Role.OWNER) {
         throw new RuntimeException("Only users with role OWNER can add pages.");
     }
